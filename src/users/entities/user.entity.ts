@@ -6,8 +6,11 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
+
+  @Column({ select: false })
+  password: string;
 
   @Column()
   phone: string;
@@ -30,10 +33,10 @@ export class User {
   @OneToMany(() => Article, (article) => article.user)
   photos: Article[];
 
-  @Column({ default: Date.now() })
-  createdAt: Date;
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  time: Date;
 
-  @Column({ default: Date.now() })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
 
   @Column({ default: true })

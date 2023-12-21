@@ -33,10 +33,10 @@ export class Article {
   @ManyToOne(() => User, (user) => user.photos)
   user: User;
 
-  @Column({ default: Date.now() })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
-  @Column({ default: Date.now() })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
 
   @Column({ default: true })
