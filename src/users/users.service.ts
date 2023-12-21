@@ -1,26 +1,48 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserRepository } from './repository/user.repository';
+import { EncryptionService } from 'src/encryption/encryption.service';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly encryptionService: EncryptionService,
+  ) {}
+
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    const user = await this.userRepository.getUserBy({
+      email: createUserDto.email,
+    });
+
+    if (user) {
+      throw new HttpException('email is already taken', HttpStatus.BAD_REQUEST);
+    }
+
+    const hashedPassword = await this.encryptionService.hash(
+      createUserDto.password,
+    );
+    createUserDto.password = hashedPassword;
+    return await this.userRepository.createUser(createUserDto);
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll(): Promise<User[]> {
+    return await this.userRepository.getUsers();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findById(id: number): Promise<User> {
+    return await this.userRepository.getUserById(id);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+    const userEntity = await this.userRepository.getUserById(id);
+    return await this.userRepository.updateUser(updateUserDto, userEntity);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number): Promise<User> {
+    const userEntity = await this.userRepository.getUserById(id);
+    return await this.userRepository.removeUser(userEntity);
   }
 }
