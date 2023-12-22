@@ -30,7 +30,7 @@ export class Article {
   @Column()
   category: string;
 
-  @ManyToOne(() => User, (user) => user.photos)
+  @ManyToOne(() => User, (user) => user.articles)
   user: User;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })

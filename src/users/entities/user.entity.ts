@@ -9,7 +9,7 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @Column({ select: false })
+  @Column({ select: true })
   password: string;
 
   @Column()
@@ -31,10 +31,10 @@ export class User {
   rate: number;
 
   @OneToMany(() => Article, (article) => article.user)
-  photos: Article[];
+  articles: Article[];
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  time: Date;
+  createdAt: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;

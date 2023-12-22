@@ -6,10 +6,11 @@ import { EncryptionModule } from './encryption/encryption.module';
 import { UsersModule } from './users/users.module';
 import { User } from './users/entities/user.entity';
 import { Article } from './articles/entities/article.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ envFilePath: ['.env.local'] }),
+    ConfigModule.forRoot({ envFilePath: ['.env'] }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DATABASE_HOST,
@@ -23,6 +24,7 @@ import { Article } from './articles/entities/article.entity';
     ArticlesModule,
     EncryptionModule,
     UsersModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

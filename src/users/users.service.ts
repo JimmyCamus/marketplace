@@ -38,6 +38,10 @@ export class UsersService {
     return await this.userRepository.getUserById(id);
   }
 
+  async findBy(strategy: object): Promise<User> {
+    return await this.userRepository.getUserBy(strategy);
+  }
+
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
     const userEntity = await this.userRepository.getUserById(id);
     return await this.userRepository.updateUser(updateUserDto, userEntity);
