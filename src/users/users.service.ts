@@ -25,7 +25,9 @@ export class UsersService {
       createUserDto.password,
     );
     createUserDto.password = hashedPassword;
-    return await this.userRepository.createUser(createUserDto);
+    const userEntity = await this.userRepository.createUser(createUserDto);
+    userEntity.password = null;
+    return userEntity;
   }
 
   async findAll(): Promise<User[]> {
